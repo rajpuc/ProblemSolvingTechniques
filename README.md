@@ -98,6 +98,16 @@ By identifying ranges where 〈 n / i 〉 is constant, we can:
 ---
 ![](./images/2.png)
 
+# Day 3:
+- ### When the number of iterations depends on division Time complexity will be logarithomic.For Example count digits in a number:
+```javascript
+
+while(N>0){
+    lastdig=N%10
+    N/=10;
+}
+```
+- ### here number of iterations depends on divison,and every time it is divisible by 10 so the TC is O(log10(N)). if it will divisible by 2 then TC will O(log2(N)), if 3 then O(log3(N))...so on.
 
 
 
