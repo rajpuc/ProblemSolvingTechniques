@@ -1,37 +1,125 @@
-## Day 5: Recursion (Multiple Recursion Calls)
-
+## Day 7: All other kind of patterns in Recursion
+### Printing subsequences whose sum is k
 ```cpp
-#include<bits/stdc++.h>
-using namespace std;
-
-int fibonacci(int N){
-   
-   // Base Condition.
-   if(N <= 1)
-   {
-       return N;
-   }
-
-   // Problem broken down into 2 functional calls
-   // and their results combined and returned.
-   int last = fibonacci(N-1);
-   int slast = fibonacci(N-2);
-   
-   return last + slast;
-
+void f(int ind, vector<int> &ds, int s, int sum, int arr[],int n){
+  if(ind == n){
+    if(s == sum){
+      for(auto it:ds) cout<<it<<" ";
+      cout<<endl;
+    }
+    return;
+  }
+  ds.push_back(arr[ind]);
+  s+= arr[ind];
+  f(ind+1,ds,s,sum,arr,n);
+  s-= arr[ind];
+  ds.pop_back();
+  f(ind+1,ds,s,sum,arr,n);
 }
 
 int main(){
-  
-  // Here, let’s take the value of N to be 4.
-  int N = 4;
-  cout<<fibonacci(N)<<endl;
+  int arr[]={1,2,1};
+  int n  = 3;
+  int sum =2;
+  vector<int> ds;
+  f(0, ds, 0, sum, arr, n);
   return 0;
-
 }
 ```
-![](./images/day5.png)
+### If i modify the question: Print any one subsequence whose sum is sum(given to u);
+```cpp
+// You can be like this:
 
-### Time Complexity: O(2^N) { This problem involves two function calls for each iteration which further expands to 4 function calls and so on which makes worst-case time complexity to be exponential in nature }.
+bool flag = false;
+void f(int ind, vector<int> &ds, int s, int sum, int arr[],int n){
+  if(ind == n){
+    if(s == sum && flag == false){
+      flag = true;
+      for(auto it:ds) cout<<it<<" ";
+      cout<<endl;
+    }
+    return;
+  }
+  ds.push_back(arr[ind]);
+  s+= arr[ind];
+  f(ind+1,ds,s,sum,arr,n);
+  s-= arr[ind];
+  ds.pop_back();
+  f(ind+1,ds,s,sum,arr,n);
+}
 
-### Space Complexity: O(N) { At maximum there could be N function calls waiting in the recursion stack since we need to calculate the Nth Fibonacci number for which we also need to calculate (N-1) Fibonacci numbers before it }.
+int main(){
+  int arr[]={1,2,1};
+  int n  = 3;
+  int sum =2;
+  vector<int> ds;
+  f(0, ds, 0, sum, arr, n);
+  return 0;
+}
+```
+## This above code is something which is not preffered.
+## The technique to print only one answer: You will write the function and in the base case, if the condition is satisfied you will return true else false. This is the base case trick. Whenever you are doing a function call put that into a if condition and Whenever it satisfied simply return.
+```cpp
+
+bool f(int ind, vector<int> &ds, int s, int sum, int arr[],int n){
+  if(ind == n){
+    if(s == sum){
+      for(auto it:ds) cout<<it<<" ";
+      cout<<endl;
+      return true;
+    }
+    return false;
+  }
+  ds.push_back(arr[ind]);
+  s+= arr[ind];
+  if(f(ind+1,ds,s,sum,arr,n) == true) return true;
+  s-= arr[ind];
+  ds.pop_back();
+  if(f(ind+1,ds,s,sum,arr,n)== true) return true;
+  return false;
+}
+
+int main(){
+  int arr[]={1,2,1};
+  int n  = 3;
+  int sum =2;
+  vector<int> ds;
+  f(0, ds, 0, sum, arr, n);
+  return 0;
+}
+```
+
+## Printing number of subsequences present in given array whose sum is k
+- ### base case:
+    - ### return 1: condition satisfied
+    - ### return 0: condition not satisfied
+- ### l = f()
+- ### r = f()
+- ### return l + r;
+
+```cpp
+
+int f(int ind, int s, int sum, int arr[],int n){
+  if(ind == n){
+    if(s == sum){
+      return 1;
+    }
+    return 0;
+  }
+  
+  s+= arr[ind];
+  int r = (ind+1,s,sum,arr,n);
+  s-= arr[ind];
+  int l = f(ind+1,s,sum,arr,n);
+  return l + r;
+}
+
+int main(){
+  int arr[]={1,2,1};
+  int n  = 3;
+  int sum =2;
+  vector<int> ds;
+  cout<<f(0, 0, sum, arr, n)<<endl;
+  return 0;
+}
+```
